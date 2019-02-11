@@ -7,3 +7,20 @@ services:
       arguments:
           - '@twig'
           - '@translator'
+
+  stallfish.settings.parser:
+      class: Stallfish\CmsCommonBundle\Service\SettingsParserService
+      arguments:
+          - '@filesystem'
+          - '%stallfish.settings%'
+
+  stallfish.setting.aggregate:
+      class: Stallfish\CmsCommonBundle\Service\SettingAggregateService
+      arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@stallfish.settings.parser'
+
+  stallfish.settings:
+    class: Stallfish\CmsCommonBundle\Service\SettingsService
+    arguments:
+        - '@stallfish.setting.aggregate'
