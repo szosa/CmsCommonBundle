@@ -28,15 +28,30 @@ class SettingsService
 
     /**
      * @param string $label
-     * @return \Stallfish\CmsCommonBundle\Settings\SettingType\AbstractType
+     * @return AbstractType
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getSetting(string $label):AbstractType
     {
         return $this->settingAggregateService->getSettingType($label);
     }
 
+    /**
+     * @return array
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function getAllSetting()
     {
         return $this->settingAggregateService->getAllSetting();
+    }
+
+    /**
+     * @param string $label
+     * @return string
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function get(string $label)
+    {
+        return $this->settingAggregateService->get($label);
     }
 }

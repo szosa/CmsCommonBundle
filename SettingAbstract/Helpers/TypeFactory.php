@@ -14,7 +14,12 @@ use Stallfish\CmsCommonBundle\Settings\SettingType\BoolType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ChoiceType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ListType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\TextType;
+use Stallfish\CmsCommonBundle\Settings\Helper\TypeSettingValidator;
 
+/**
+ * Class TypeFactory
+ * @package Stallfish\CmsCommonBundle\Settings\Helper
+ */
 class TypeFactory
 {
     /**
@@ -44,8 +49,8 @@ class TypeFactory
      */
     static private function parseBoolType(array $setting, $value):BoolType
     {
-        $label = self::parseLabel($setting);
-        $tab = self::parseTab($setting);
+        $label = TypeSettingValidator::parseLabel($setting);
+        $tab = TypeSettingValidator::parseTab($setting);
         try{
             $value = (bool)$value;
         }catch(\Exception $exception)
@@ -62,9 +67,9 @@ class TypeFactory
      */
     static private function parseTextType(array $setting, $value):TextType
     {
-        $label = self::parseLabel($setting);
-        $placeholder = self::parsePlaceholder($setting);
-        $required = self::parseRequired($setting);
+        $label = TypeSettingValidator::parseLabel($setting);
+        $placeholder = TypeSettingValidator::parsePlaceholder($setting);
+        $required = TypeSettingValidator::parseRequired($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -82,7 +87,7 @@ class TypeFactory
      */
     static private function parseListType(array $setting, $value):ListType
     {
-        $label = self::parseLabel($setting);
+        $label = TypeSettingValidator::parseLabel($setting);
         try{
             $value = (array)$value;
         }catch(\Exception $exception)
@@ -99,11 +104,11 @@ class TypeFactory
      */
     static private function parseChoiceType(array $setting, $value):ChoiceType
     {
-        $label = self::parseLabel($setting);
-        $choice = self::parseChoice($setting);
-        $required = self::parseRequired($setting);
-        $tab = self::parseTab($setting);
-        $multiple = self::parseMultiple($setting);
+        $label = TypeSettingValidator::parseLabel($setting);
+        $choice = TypeSettingValidator::parseChoice($setting);
+        $required = TypeSettingValidator::parseRequired($setting);
+        $tab = TypeSettingValidator::parseTab($setting);
+        $multiple = TypeSettingValidator::parseMultiple($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -113,103 +118,7 @@ class TypeFactory
         return new ChoiceType($label, $value, $tab, $choice, $required, $multiple);
     }
 
-    /**
-     * @param array $setting
-     * @return string
-     */
-    static function parseLabel(array $setting):string
-    {
-        try{
-            return (string)$setting['label'];
-        }catch(\Exception $exception)
-        {
-            printf('Missing \'label\' attribute for setting or cannot be converted to string');
-        }
 
-        return null;
-    }
-
-    /**
-     * @param array $settings
-     * @return string
-     */
-    static function parsePlaceholder(array $settings):string
-    {
-        if(key_exists('placeholder', $settings))
-        {
-            try{
-                return (string)$settings['placeholder'];
-            }catch(\Exception $exception)
-            {
-                sprintf('Value of %s cannot be convert to string', self::parseLabel($settings));
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param array $setting
-     * @return bool
-     */
-    static function parseRequired(array $setting):bool
-    {
-        if(key_exists('required', $setting)) {
-            try {
-                return (bool)$setting['required'];
-            } catch (\Exception $exception) {
-                sprintf('Value of field required in %s setting should be bool type', self::parseLabel($setting));
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $setting
-     * @return array
-     */
-    static function parseChoice(array $setting):array
-    {
-        try{
-            return (array)$setting['choice'];
-        }catch(\Exception $exception)
-        {
-            sprintf('Value of %s cannot be convert to array', self::parseLabel($setting));
-        }
-        return [];
-    }
-
-    static function parseTab(array $settings):string
-    {
-        if(key_exists('tab', $settings))
-        {
-            try{
-                return (string)$settings['tab'];
-            }catch(\Exception $exception)
-            {
-                sprintf('Value of %s cannot be convert to string', self::parseLabel($settings));
-            }
-        }
-
-        return 'default';
-    }
-
-    /**
-     * @param array $setting
-     * @return bool
-     */
-    static function parseMultiple(array $setting):bool
-    {
-        if(key_exists('multiple', $setting)) {
-            try {
-                return (bool)$setting['multiple'];
-            } catch (\Exception $exception) {
-                sprintf('Value of field multiple in %s setting should be bool type', self::parseLabel($setting));
-            }
-        }
-
-        return false;
-    }
 
 
 }

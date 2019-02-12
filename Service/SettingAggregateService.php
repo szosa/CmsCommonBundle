@@ -15,6 +15,10 @@ use Stallfish\CmsCommonBundle\Repository\SettingsRepository;
 use Stallfish\CmsCommonBundle\Settings\Helper\TypeFactory;
 use Stallfish\CmsCommonBundle\Settings\SettingType\AbstractType;
 
+/**
+ * Class SettingAggregateService
+ * @package Stallfish\CmsCommonBundle\Service
+ */
 class SettingAggregateService
 {
     /**
@@ -50,20 +54,25 @@ class SettingAggregateService
     /**
      * @param string $label
      * @return AbstractType
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getSettingType(string $label): AbstractType
     {
         $setting = $this->settingsRepository->find($label);
 
-        if(is_null($setting))
+        if(is_null($setting && key_exists($label, $this->settingArray)))
         {
             $setting = $this->createSettingEntity($label);
+        }
+        if(is_null($setting)){
+            throw new \Exception(sprintf('Setting: %s dosen\'t exist', $label));
         }
         return TypeFactory::getTypeObject($this->getSettingArray($label), $setting->getSettingValue());
     }
 
     /**
      * @return array
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getAllSetting()
     {
@@ -90,11 +99,30 @@ class SettingAggregateService
         return [];
     }
 
+    /**
+     * @param string $label
+     * @return Settings
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     private function createSettingEntity(string $label):Settings
     {
         $setting = new Settings();
         $setting->setSettingLabel($label);
+        $this->em->persist($setting);
+        $this->em->flush();
 
         return $setting;
+    }
+
+    /**
+     * @param string $label
+     * @return string
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function get(string $label)
+    {
+        $setting = $this->getSettingType($label);
+
+        return $setting->getValue();
     }
 }
