@@ -10,7 +10,7 @@ use Sensio\Bundle\GeneratorBundle\Annotation\Versioning;
 /**
  * Settings
  *
- * @ORM\Table(name="settings")
+ * @ORM\Table(name="stallfish_cms_settings")
  * @ORM\Entity(repositoryClass="Stallfish\CmsCommonBundle\Repository\SettingsRepository")
  */
 class Settings
@@ -43,7 +43,7 @@ class Settings
      *
      * @Translation(trans=false)
      *
-     * @ORM\Column(name="setting_value", type="string", length=255)
+     * @ORM\Column(name="setting_value", type="string", length=255, nullable=true)
      */
     private $settingValue;
 

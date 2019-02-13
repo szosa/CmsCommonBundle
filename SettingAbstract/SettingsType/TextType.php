@@ -31,11 +31,12 @@ class TextType extends AbstractType
      * @param string $placeholder
      * @param bool $required
      */
-    public function __construct(string $label, string $value, string $placeholder, bool $required = false)
+    public function __construct(string $label, string $value, string $placeholder, bool $required = false, $tab = null)
     {
-        parent::__construct($label, $value);
+        parent::__construct($label, $value, $tab);
         $this->placeholder = $placeholder;
         $this->required = $required;
+        $this->tab = $tab;
     }
 
     /**
@@ -60,5 +61,10 @@ class TextType extends AbstractType
     public function getType(): string
     {
         return self::TEXT_TYPE;
+    }
+
+    public function getValue():string
+    {
+        return (string)parent::getValue();
     }
 }

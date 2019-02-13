@@ -24,3 +24,11 @@ services:
     class: Stallfish\CmsCommonBundle\Service\SettingsService
     arguments:
         - '@stallfish.setting.aggregate'
+
+  stallfish.settings.twig:
+    class: Stallfish\CmsCommonBundle\Settings\Twig\StallfishSettingsExtension
+    public: false
+    arguments:
+        - '@stallfish.settings'
+    tags:
+        - { name: twig.extension }

@@ -22,4 +22,9 @@ class BoolType extends AbstractType
     {
         return self::BOOL_TYPE;
     }
+
+    public function getValue(): bool
+    {
+        return (bool)parent::getValue();
+    }
 }

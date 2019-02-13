@@ -1,0 +1,74 @@
+{% extends 'base_admin_lte.html.twig' %}
+
+{% block mainTitle %}
+    {% trans %}control.panel{% endtrans %}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-default color-palette-box">
+                <div class="box-header with-border">
+                    <div class="col-xs-6">
+                        <h3 class="box-title">
+                        </h3>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-6">
+                        <!-- Custom Tabs -->
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs">
+                                {% for tab in tabs %}
+                                    {% if loop.first %}
+                                        <li class="active"><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
+                                    {% else %}
+                                        <li class=""><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content">
+                                {% for key, settings in settingsTab %}
+                                <div class="tab-pane {% if loop.first %}active{% endif %}" id="tab_{{ key }}">
+                                    {% for setting in settings %}
+                                        <div class="form-group">
+                                            {% if setting.type == 'text' %}
+                                                <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
+                                                <input type="text" class="form-control" id="{{ setting.label }}" placeholder="{{ setting.placeholder|trans }}"{% if setting.required %}required{% endif %} value="{{ setting.value }}">
+                                            {% elseif setting.type == 'bool' %}
+                                                <input type="checkbox" id="setting_{{ setting.label }}" name="setting_{{ setting.label }}" {% if setting.value %}checked {% endif %}>
+                                                <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
+                                            {% elseif setting.type == 'choice' %}
+                                                <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
+                                                {% for value in setting.choice %}
+                                                <div class="form-group">
+                                                    <div class="radio">
+                                                        <label>
+                                                        <input type="radio" name="setting_{{ setting.label }}" value="{{ value }}" {% if value == setting.value %}checked="checked"{% endif %}>
+                                                            {{ value|trans }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            {% elseif setting.type == 'list' %}
+                                                <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
+
+                                                <input type="text" class="form-control" id="setting_{{ setting.label }}" value="{{ setting.value|join('; ') }}">
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+<script src="{{ asset('adminlte/js/run/run-datatable.js') }}"></script>
+{% endblock %}

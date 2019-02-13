@@ -70,6 +70,7 @@ class TypeFactory
         $label = TypeSettingValidator::parseLabel($setting);
         $placeholder = TypeSettingValidator::parsePlaceholder($setting);
         $required = TypeSettingValidator::parseRequired($setting);
+        $tab = TypeSettingValidator::parseTab($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -77,7 +78,7 @@ class TypeFactory
             sprintf('Value of %s cannot be convert to string', $label);
         }
 
-        return new TextType($label, $value, $placeholder, $required);
+        return new TextType($label, $value, $placeholder, $required, $tab);
     }
 
     /**
@@ -88,13 +89,15 @@ class TypeFactory
     static private function parseListType(array $setting, $value):ListType
     {
         $label = TypeSettingValidator::parseLabel($setting);
+        $tab = TypeSettingValidator::parseTab($setting);
+        $value = explode(';', $value);
         try{
             $value = (array)$value;
         }catch(\Exception $exception)
         {
             sprintf('Value of %s cannot be convert to array', $label);
         }
-        return new ListType($label, $value);
+        return new ListType($label, $value, $tab);
     }
 
     /**

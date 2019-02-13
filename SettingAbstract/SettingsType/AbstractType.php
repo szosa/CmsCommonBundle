@@ -27,11 +27,6 @@ abstract class AbstractType  implements TypeInterface
     protected $label;
 
     /**
-     * @var Settings
-     */
-    protected $setting;
-
-    /**
      * @var
      */
     protected $value;
@@ -49,7 +44,6 @@ abstract class AbstractType  implements TypeInterface
      */
     public function __construct(string $label, $value, string $tab = null)
     {
-        $this->setting = new Settings();
         $this->label = $label;
         $this->tab = $tab;
         $this->value = $value;
@@ -66,8 +60,22 @@ abstract class AbstractType  implements TypeInterface
     /**
      * @return string
      */
-    public function getValue():string
+    public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTab():string
+    {
+        if(is_null($this->tab))
+        {
+            return 'general';
+        }else{
+            return $this->tab;
+        }
+
     }
 }

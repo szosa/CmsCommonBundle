@@ -36,11 +36,19 @@ class SettingAggregateService
      */
     private $em;
 
+    /**
+     * @var array
+     */
     private $settingArray;
 
     /**
-     * SettingAggregate constructor.
-     * @param SettingsRepository $settingsRepository
+     * @var array
+     */
+    private $settingLabels;
+
+    /**
+     * SettingAggregateService constructor.
+     * @param EntityManager $em
      * @param SettingsParserService $settingsParserService
      */
     public function __construct(EntityManager $em, SettingsParserService $settingsParserService)
@@ -59,8 +67,7 @@ class SettingAggregateService
     public function getSettingType(string $label): AbstractType
     {
         $setting = $this->settingsRepository->find($label);
-
-        if(is_null($setting && key_exists($label, $this->settingArray)))
+        if(is_null($setting) && key_exists($label, $this->settingArray))
         {
             $setting = $this->createSettingEntity($label);
         }
@@ -91,6 +98,7 @@ class SettingAggregateService
      */
     private function getSettingArray(string $label): array
     {
+
         try {
             return (array)$this->settingArray[$label];
         } catch (\Exception $exception) {

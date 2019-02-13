@@ -76,8 +76,8 @@ class SettingsParserService
     private function getParametersAsArray(String $settingPath)
     {
         try {
-            $settings = Yaml::parseFile($settingPath);
-            return $settings;
+
+            return Yaml::parseFile($settingPath);
         } catch (ParseException $exception) {
             printf('Unable to parse the YAML string: %s', $exception->getMessage());
         }

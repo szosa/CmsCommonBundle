@@ -70,4 +70,9 @@ class ChoiceType extends AbstractType
         return self::CHOICE_TYPE;
     }
 
+    public function getValue():string
+    {
+        return parent::getValue();
+    }
+
 }
