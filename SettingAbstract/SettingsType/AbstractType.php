@@ -14,12 +14,12 @@ use Stallfish\CmsCommonBundle\Entity\Settings;
  * Class AbstractType
  * @package Stallfish\CmsCommonBundle\Settings\SettingType
  */
-abstract class AbstractType  implements TypeInterface
+abstract class AbstractType implements TypeInterface
 {
-    const TEXT_TYPE = 'text';
-    const BOOL_TYPE = 'bool';
+    const TEXT_TYPE   = 'text';
+    const BOOL_TYPE   = 'bool';
     const CHOICE_TYPE = 'choice';
-    const LIST_TYPE = 'list';
+    const LIST_TYPE   = 'list';
 
     /**
      * @var string

@@ -14,7 +14,7 @@ use Stallfish\CmsCommonBundle\Settings\SettingType\BoolType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ChoiceType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ListType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\TextType;
-use Stallfish\CmsCommonBundle\Settings\Helper\TypeSettingValidator;
+use Stallfish\CmsCommonBundle\Settings\Helper\TypeSettingParser;
 
 /**
  * Class TypeFactory
@@ -49,8 +49,8 @@ class TypeFactory
      */
     static private function parseBoolType(array $setting, $value):BoolType
     {
-        $label = TypeSettingValidator::parseLabel($setting);
-        $tab = TypeSettingValidator::parseTab($setting);
+        $label = TypeSettingParser::parseLabel($setting);
+        $tab = TypeSettingParser::parseTab($setting);
         try{
             $value = (bool)$value;
         }catch(\Exception $exception)
@@ -67,10 +67,10 @@ class TypeFactory
      */
     static private function parseTextType(array $setting, $value):TextType
     {
-        $label = TypeSettingValidator::parseLabel($setting);
-        $placeholder = TypeSettingValidator::parsePlaceholder($setting);
-        $required = TypeSettingValidator::parseRequired($setting);
-        $tab = TypeSettingValidator::parseTab($setting);
+        $label = TypeSettingParser::parseLabel($setting);
+        $placeholder = TypeSettingParser::parsePlaceholder($setting);
+        $required = TypeSettingParser::parseRequired($setting);
+        $tab = TypeSettingParser::parseTab($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -88,8 +88,8 @@ class TypeFactory
      */
     static private function parseListType(array $setting, $value):ListType
     {
-        $label = TypeSettingValidator::parseLabel($setting);
-        $tab = TypeSettingValidator::parseTab($setting);
+        $label = TypeSettingParser::parseLabel($setting);
+        $tab = TypeSettingParser::parseTab($setting);
         $value = explode(';', $value);
         try{
             $value = (array)$value;
@@ -107,11 +107,11 @@ class TypeFactory
      */
     static private function parseChoiceType(array $setting, $value):ChoiceType
     {
-        $label = TypeSettingValidator::parseLabel($setting);
-        $choice = TypeSettingValidator::parseChoice($setting);
-        $required = TypeSettingValidator::parseRequired($setting);
-        $tab = TypeSettingValidator::parseTab($setting);
-        $multiple = TypeSettingValidator::parseMultiple($setting);
+        $label = TypeSettingParser::parseLabel($setting);
+        $choice = TypeSettingParser::parseChoice($setting);
+        $required = TypeSettingParser::parseRequired($setting);
+        $tab = TypeSettingParser::parseTab($setting);
+        $multiple = TypeSettingParser::parseMultiple($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -120,8 +120,4 @@ class TypeFactory
         }
         return new ChoiceType($label, $value, $tab, $choice, $required, $multiple);
     }
-
-
-
-
 }

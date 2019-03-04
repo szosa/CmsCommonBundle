@@ -12,7 +12,7 @@ namespace Stallfish\CmsCommonBundle\Settings\Helper;
  * Class TypeSettingValidator
  * @package Stallfish\CmsCommonBundle\Settings\Helper
  */
-class TypeSettingValidator
+class TypeSettingParser
 {
     /**
      * @param array $setting

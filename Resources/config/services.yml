@@ -12,7 +12,7 @@ services:
       class: Stallfish\CmsCommonBundle\Service\SettingsParserService
       arguments:
           - '@filesystem'
-          - '%stallfish.settings%'
+          - '%kernel.root_dir%'
 
   stallfish.setting.aggregate:
       class: Stallfish\CmsCommonBundle\Service\SettingAggregateService

@@ -38,6 +38,7 @@ class StallfishSettingsExtension extends AbstractExtension
     {
         return [
             new TwigFunction('stallfish_setting', [$this, 'stallfishSetting']),
+            new TwigFunction('stallfish_setting_value', [$this, 'stallfishSettingValue']),
         ];
     }
 
@@ -49,5 +50,15 @@ class StallfishSettingsExtension extends AbstractExtension
     public function stallfishSetting(string $label)
     {
         return $this->settingsService->get($label);
+    }
+
+    /**
+     * @param string $label
+     * @return array|bool|null|string
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function stallfishSettingValue(string $label)
+    {
+        return $this->settingsService->getValue($label);
     }
 }

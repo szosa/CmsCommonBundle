@@ -35,10 +35,13 @@ class SettingsParserService
      * @param Filesystem $filesystem
      * @param array $settingsDir
      */
-    public function __construct(Filesystem $filesystem, array $settingsDir)
+    public function __construct(Filesystem $filesystem,String $rootDir)
     {
         $this->filesystem = $filesystem;
-        $this->settingsDir = $settingsDir;
+        $config = Yaml::parse(
+            file_get_contents( realpath($rootDir . '/config/config.yml'))
+        );
+        $this->settingsDir = $config['cms_common']['settings'];
         $this->settingPaths = $this->prepareSettingPathArray();
     }
 
@@ -76,7 +79,6 @@ class SettingsParserService
     private function getParametersAsArray(String $settingPath)
     {
         try {
-
             return Yaml::parseFile($settingPath);
         } catch (ParseException $exception) {
             printf('Unable to parse the YAML string: %s', $exception->getMessage());
@@ -95,7 +97,7 @@ class SettingsParserService
         $path = realpath($string);
         if(!$this->filesystem->exists($path))
         {
-            throw new FileException(sprintf('Setting file: %s dosen\'t exist', $settingPath));
+            throw new FileException(sprintf('Setting file: %s dosen\'t exist', $string . $path));
         }
 
         return $path;

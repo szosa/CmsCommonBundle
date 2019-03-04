@@ -42,11 +42,6 @@ class SettingAggregateService
     private $settingArray;
 
     /**
-     * @var array
-     */
-    private $settingLabels;
-
-    /**
      * SettingAggregateService constructor.
      * @param EntityManager $em
      * @param SettingsParserService $settingsParserService
@@ -62,6 +57,7 @@ class SettingAggregateService
     /**
      * @param string $label
      * @return AbstractType
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getSettingType(string $label): AbstractType
@@ -79,6 +75,7 @@ class SettingAggregateService
 
     /**
      * @return array
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getAllSetting()
@@ -98,7 +95,6 @@ class SettingAggregateService
      */
     private function getSettingArray(string $label): array
     {
-
         try {
             return (array)$this->settingArray[$label];
         } catch (\Exception $exception) {
@@ -110,6 +106,7 @@ class SettingAggregateService
     /**
      * @param string $label
      * @return Settings
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function createSettingEntity(string $label):Settings
@@ -125,6 +122,7 @@ class SettingAggregateService
     /**
      * @param string $label
      * @return string
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function get(string $label)
