@@ -33,14 +33,15 @@ class ChoiceType extends AbstractType
      * ChoiceType constructor.
      * @param string $label
      * @param $value
+     * @param array $setting
      * @param $tab
      * @param array $choice
      * @param bool $required
      * @param bool $multiple
      */
-    public function __construct(string $label, $value, $tab, array $choice,  bool $required = false, bool $multiple = false)
+    public function __construct(string $label, $value,array $setting, $tab, array $choice,  bool $required = false, bool $multiple = false)
     {
-        parent::__construct($label, $value, $tab);
+        parent::__construct($label, $value, $setting, $tab);
         $this->choice = $choice;
         $this->required = $required;
         $this->multiple = $multiple;

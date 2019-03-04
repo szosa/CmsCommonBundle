@@ -28,12 +28,14 @@ class TextType extends AbstractType
      * TextType constructor.
      * @param string $label
      * @param string $value
+     * @param array $setting
      * @param string $placeholder
      * @param bool $required
+     * @param null $tab
      */
-    public function __construct(string $label, string $value, string $placeholder, bool $required = false, $tab = null)
+    public function __construct(string $label, string $value, array $setting, string $placeholder, bool $required = false, $tab = null)
     {
-        parent::__construct($label, $value, $tab);
+        parent::__construct($label, $value, $setting, $tab);
         $this->placeholder = $placeholder;
         $this->required = $required;
         $this->tab = $tab;

@@ -57,7 +57,7 @@ class TypeFactory
         {
             sprintf('Value of %s cannot be convert to bool', $label);
         }
-        return new BoolType($label, $value, $tab);
+        return new BoolType($label, $value, $setting, $tab);
     }
 
     /**
@@ -78,7 +78,7 @@ class TypeFactory
             sprintf('Value of %s cannot be convert to string', $label);
         }
 
-        return new TextType($label, $value, $placeholder, $required, $tab);
+        return new TextType($label, $value, $setting, $placeholder, $required, $tab);
     }
 
     /**
@@ -97,7 +97,7 @@ class TypeFactory
         {
             sprintf('Value of %s cannot be convert to array', $label);
         }
-        return new ListType($label, $value, $tab);
+        return new ListType($label, $value, $setting, $tab);
     }
 
     /**
@@ -118,6 +118,6 @@ class TypeFactory
         {
             sprintf('Value of %s cannot be convert to string', $label);
         }
-        return new ChoiceType($label, $value, $tab, $choice, $required, $multiple);
+        return new ChoiceType($label, $value, $setting, $tab, $choice, $required, $multiple);
     }
 }

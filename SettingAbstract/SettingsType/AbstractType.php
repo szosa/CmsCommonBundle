@@ -37,16 +37,22 @@ abstract class AbstractType implements TypeInterface
     protected $tab;
 
     /**
+     * @var array
+     */
+    protected $parametersArray;
+
+    /**
      * AbstractType constructor.
      * @param string $label
      * @param $value
      * @param string|null $tab
      */
-    public function __construct(string $label, $value, string $tab = null)
+    public function __construct(string $label, $value, array $parametersArray, string $tab = null)
     {
         $this->label = $label;
         $this->tab = $tab;
         $this->value = $value;
+        $this->parametersArray = $parametersArray;
     }
 
     /**
@@ -76,6 +82,17 @@ abstract class AbstractType implements TypeInterface
         }else{
             return $this->tab;
         }
+    }
 
+    /**
+     * @return array
+     */
+    public function getParametersArray():array
+    {
+        if(is_array($this->parametersArray)){
+            return $this->parametersArray;
+        }else{
+            return [];
+        }
     }
 }
