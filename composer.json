@@ -4,7 +4,7 @@
   "description": "This bundle provide a common feature to Stallfish CMS",
   "keywords": [],
   "type": "symfony-bundle",
-  "license": "All rights reserved",
+  "license": "CC-BY-ND-3.0",
   "authors": [
     {
       "name": "Szymon Osadowski",
