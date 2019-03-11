@@ -27,4 +27,9 @@ class BoolType extends AbstractType
     {
         return (bool)parent::getValue();
     }
+
+    public function getFormFieldType():string
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\CheckboxType::class;
+    }
 }

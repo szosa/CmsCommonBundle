@@ -32,3 +32,6 @@ services:
         - '@stallfish.settings'
     tags:
         - { name: twig.extension }
+
+  stalfish.setting.validator:
+    class: Stallfish\CmsCommonBundle\Service\SettingValidatorService

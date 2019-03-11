@@ -3,9 +3,12 @@
 namespace Stallfish\CmsCommonBundle\Controller;
 
 use Predis\Client;
+use Stallfish\CmsCommonBundle\Settings\Helper\FormTypeFactory;
 use Stallfish\CmsCommonBundle\Settings\SettingType\AbstractType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\BoolType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 /**
@@ -16,60 +19,69 @@ use Symfony\Component\HttpFoundation\Request;
 class ControlPanelController extends Controller
 {
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("/", name="control_panel")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $settings = $this->get('stallfish.settings')->getAllSetting();
-        $tabSetting = [];
-        $tabs = [];
-        /** @var AbstractType $setting */
-        foreach ($settings as $setting)
+        $tabs = $this->prepareTab($settings);
+        $formFactory = new FormTypeFactory($this->createFormBuilder());
+        $form =  $formFactory->addFields($settings);
+
+        $form->handleRequest($request);
+        if($form->isValid() && $form->isSubmitted())
         {
-            $tab = $setting->getTab();
-            $tabs[$tab] =$tab;
-            $tabSetting[$tab][$setting->getLabel()] = $setting;
+            $this->saveSettings($form, $settings);
         }
         return $this->render('@CmsCommon/ControlPanel/index.html.twig',[
             'tabs' => $tabs,
-            'settingsTab' => $tabSetting
+            'settingsTab' => $settings,
+            'form' => $form->createView(),
+            'settings' => $settings
         ]);
     }
 
     /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/submit", name="control_panel_submit")
+     * @param array $settings
+     * @return array
      */
-    public function setControlPanel(Request $request)
+    private function prepareTab(array $settings):array
     {
-        $settings = $this->get('stallfish.settings')->getAllSetting();
-        $requestSetting = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $redis = new Client();
-        /** @var AbstractType $setting */
-        foreach($settings as $key => $setting) {
-            $settingEntity = $em->getRepository('CmsCommonBundle:Settings')->findOneBy(['settingLabel' => $key]);
-            $settingEntity->setSettingValue(null);
-            if (key_exists('setting_' . $setting->getLabel(), $requestSetting)) {
-                if ($setting instanceof BoolType) {
-                    if ($requestSetting['setting_' . $setting->getLabel()] == 'on') {
-                        $settingEntity->setSettingValue(true);
-                    } else {
-                        $settingEntity->setSettingValue(false);
-                    }
-                } else {
-                    $settingEntity->setSettingValue($requestSetting['setting_' . $setting->getLabel()]);
-                }
-            }
-            $em->persist($settingEntity);
-            $em->flush();
-            $redis->set($settingEntity->getSettingLabel(), $settingEntity->getSettingValue());
-            $redis->set('type_' . $settingEntity->getSettingLabel(), get_class($setting));
+        $tab = [];
+        /**
+         * @var $setting AbstractType
+         */
+        foreach($settings as $setting)
+        {
+            $tab[$setting->getTab()][] = $setting->getLabel();
         }
-        return $this->redirectToRoute('control_panel');
+
+        return $tab;
+    }
+
+    /**
+     * @param Form $formBuilder
+     */
+    private function saveSettings(Form $formBuilder, array $settings)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $formBuilder->getData();
+        $redis = new Client();
+        foreach($settings as $key => $value)
+        {
+            $setting = $em->getRepository('CmsCommonBundle:Settings')->findOneBy(['settingLabel' => $key]);
+            $setting->setSettingValue($data[$value->getLabel()]);
+            $em->persist($setting);
+
+            $redis->set($key, $data[$value->getLabel()]);
+            $redis->set('type_' . $key, get_class($value));
+        }
+
+        $em->flush();
     }
 }

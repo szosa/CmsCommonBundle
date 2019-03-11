@@ -1,76 +1,55 @@
 {% extends 'base_admin_lte.html.twig' %}
 
-{% block mainTitle %}
-    {% trans %}control.panel{% endtrans %}
-{% endblock %}
 {% block body %}
     <div class="row">
-        <div class="col-xs-12">
-            <form id="control_panel_form" action="{{ path('control_panel_submit') }}" method="post">
-
+        <div class="col-xs-12 col-lg-6">
             <div class="box box-default color-palette-box">
                 <div class="box-header with-border">
-                    <div class="col-xs-6">
-                        <h3 class="box-title">
-
-                        </h3>
-                    </div>
+                    <h3 class="box-title">
+                        <i class="fa fa-fw fa-gear"></i>
+                        {% trans %}control.panel{% endtrans %}
+                    </h3>
                 </div>
                 <div class="box-body">
-                    <div class="col-md-6">
-                        <!-- Custom Tabs -->
-                        <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs">
-                                    {% for tab in tabs %}
-                                        {% if loop.first %}
-                                            <li class="active"><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
-                                        {% else %}
-                                            <li class=""><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                                <div class="tab-content">
-                                    {% for key, settings in settingsTab %}
-                                    <div class="tab-pane {% if loop.first %}active{% endif %}" id="tab_{{ key }}">
+                    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            {% for tab, settings in tabs %}
+                                {% if loop.first %}
+                                    <li class="active"><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
+                                {% else %}
+                                    <li><a href="#tab_{{ tab }}" data-toggle="tab">{{ tab|trans }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for tab, settings in tabs %}
+                                {% if loop.first %}
+                                    <div class="tab-pane active" id="tab_{{ tab }}">
                                         {% for setting in settings %}
+                                            {% if form[setting].vars.errors|length %}
+                                            <div class="form-group has-error">
+                                            {% else %}
                                             <div class="form-group">
-                                                {% if setting.type == 'text' %}
-                                                    <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
-                                                    <input type="text" class="form-control" id="setting_{{ setting.label }}" placeholder="{{ setting.placeholder|trans }}"{% if setting.required %}required{% endif %} value="{{ setting.value }}" name="setting_{{ setting.label }}">
-                                                {% elseif setting.type == 'bool' %}
-                                                    <input type="checkbox" id="setting_{{ setting.label }}" name="setting_{{ setting.label }}" {% if setting.value %}checked {% endif %}>
-                                                    <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
-                                                {% elseif setting.type == 'choice' %}
-                                                    <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
-                                                    {% for value in setting.choice %}
-                                                    <div class="form-group">
-                                                        <div class="radio">
-                                                            <label>
-                                                            <input type="radio" name="setting_{{ setting.label }}" value="{{ value }}" {% if value == setting.value %}checked="checked"{% endif %}>
-                                                                {{ value|trans }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    {% endfor %}
-                                                {% elseif setting.type == 'list' %}
-                                                    <label for="setting_{{ setting.label }}">{{ setting.label|trans }}</label>
-
-                                                    <input type="text" class="form-control" id="setting_{{ setting.label }}" value="{{ setting.value|join(';') }}" name="setting_{{ setting.label }}">
-                                                {% endif %}
+                                            {% endif %}
+                                                {{ form_label(form[setting])  }}
+                                                {{ form_widget(form[setting]) }}
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    {% endfor %}
-                                </div>
+                                {% else %}
+                                    <div class="tab-pane" id="tab_{{ tab }}">
+                                        {% for setting in settings %}
+                                            {{ form_row(form[setting]) }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-                <div class="box-footer">
-                    <input type="submit" class="btn btn-success" value="{% trans %}security.save{% endtrans %}">
+                    {{ form_end(form)}}
                 </div>
             </div>
-            </form>
-
         </div>
     </div>
 {% endblock %}

@@ -50,15 +50,24 @@ class SettingValidatorService
 
     /**
      * SettingValidatorService constructor.
-     * @param AbstractType $abstractType
      */
-    public function __construct(AbstractType $abstractType)
+    public function __construct()
+    {
+        $this->symfonyValidator = Validation::createValidator();
+    }
+
+    public function setParametersToValidate(AbstractType $abstractType)
     {
         $this->object = $abstractType;
-        $this->validators = $this->setValidators();
-        $this->symfonyValidator = Validation::createValidator();
-        $this->value = $abstractType->getValue();
-        $this->validate();
+        if(key_exists('validators', $abstractType->getParametersArray())) {
+            $this->validators = $this->setValidators();
+            $this->value = $abstractType->getValue();
+            $this->validate();
+        }else{
+            $this->isValid = true;
+            $this->errorMessage = [];
+        }
+        return $this;
     }
 
     /**
@@ -82,20 +91,32 @@ class SettingValidatorService
      */
     private function setValidators()
     {
+        return self::getValidators($this->object);
+    }
+
+    /**
+     * @param AbstractType $abstractType
+     * @return array
+     */
+    public static function getValidators(AbstractType $abstractType)
+    {
         $validatorsArray = [];
-        foreach($this->object->getParametersArray()['validators'] as $validatorParameters)
+        if(key_exists('validators', $abstractType->getParametersArray()))
         {
-            try {
-                $validator = new \ReflectionClass('Symfony\Component\Validator\Constraints\\'.$validatorParameters['class']);
-                if(key_exists('params', $validatorParameters) && is_array($validatorParameters['params']) && !empty($validatorParameters['params']))
-                {
-                    $validatorsArray[] = $validator->newInstance($validatorParameters['params']);
-                }else{
-                    $validatorsArray[] = $validator->newInstance();
-                }
-            }catch(\Exception $e)
+            foreach($abstractType->getParametersArray()['validators'] as $validatorName => $validatorParameters)
             {
-                printf('StallfishCommonBundle: Don\'t find validator: %s', $validatorParameters['class']);
+                try {
+                    $validator = new \ReflectionClass('Symfony\Component\Validator\Constraints\\' . $validatorName);
+                    if(is_array($validatorParameters))
+                    {
+                        $validatorsArray[] = $validator->newInstance($validatorParameters);
+                    }else{
+                        $validatorsArray[] = $validator->newInstance();
+                    }
+                }catch(\Exception $e)
+                {
+                    printf('StallfishCommonBundle: Don\'t find validator: %s', $validatorName);
+                }
             }
         }
 
@@ -105,11 +126,16 @@ class SettingValidatorService
     private function validate()
     {
         $this->violations = $this->symfonyValidator->validate($this->value, $this->validators);
+
         foreach($this->violations as $violation)
         {
             $this->errorMessage[] = $violation->getMessage();
         }
-        $this->isValid = (bool)count($this->errorMessage);
+        if(count($this->errorMessage)){
+            $this->isValid = false;
+        }else{
+            $this->isValid = true;
+        }
     }
 
 }

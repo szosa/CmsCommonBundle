@@ -19,4 +19,6 @@ interface TypeInterface
     public function getValue();
 
     public function getType():string;
+
+    public function getFormFieldType():string;
 }

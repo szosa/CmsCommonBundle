@@ -40,6 +40,7 @@ class SettingsService
     /**
      * @param string $label
      * @return AbstractType
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getSetting(string $label):AbstractType
@@ -49,6 +50,7 @@ class SettingsService
 
     /**
      * @return array
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getAllSetting()
@@ -59,6 +61,7 @@ class SettingsService
     /**
      * @param string $label
      * @return string
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function get(string $label)
@@ -69,6 +72,7 @@ class SettingsService
     /**
      * @param string $label
      * @return array|bool|null|string
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function getValue(string $label)

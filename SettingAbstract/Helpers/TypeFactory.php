@@ -14,8 +14,6 @@ use Stallfish\CmsCommonBundle\Settings\SettingType\BoolType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ChoiceType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\ListType;
 use Stallfish\CmsCommonBundle\Settings\SettingType\TextType;
-use Stallfish\CmsCommonBundle\Settings\Helper\TypeSettingParser;
-
 /**
  * Class TypeFactory
  * @package Stallfish\CmsCommonBundle\Settings\Helper
@@ -50,7 +48,7 @@ class TypeFactory
     static private function parseBoolType(array $setting, $value):BoolType
     {
         $label = TypeSettingParser::parseLabel($setting);
-        $tab = TypeSettingParser::parseTab($setting);
+        $tab   = TypeSettingParser::parseTab($setting);
         try{
             $value = (bool)$value;
         }catch(\Exception $exception)
@@ -67,10 +65,10 @@ class TypeFactory
      */
     static private function parseTextType(array $setting, $value):TextType
     {
-        $label = TypeSettingParser::parseLabel($setting);
+        $label       = TypeSettingParser::parseLabel($setting);
         $placeholder = TypeSettingParser::parsePlaceholder($setting);
-        $required = TypeSettingParser::parseRequired($setting);
-        $tab = TypeSettingParser::parseTab($setting);
+        $required    = TypeSettingParser::parseRequired($setting);
+        $tab         = TypeSettingParser::parseTab($setting);
         try{
             $value = (string)$value;
         }catch(\Exception $exception)
@@ -89,7 +87,7 @@ class TypeFactory
     static private function parseListType(array $setting, $value):ListType
     {
         $label = TypeSettingParser::parseLabel($setting);
-        $tab = TypeSettingParser::parseTab($setting);
+        $tab   = TypeSettingParser::parseTab($setting);
         $value = explode(';', $value);
         try{
             $value = (array)$value;
@@ -107,10 +105,10 @@ class TypeFactory
      */
     static private function parseChoiceType(array $setting, $value):ChoiceType
     {
-        $label = TypeSettingParser::parseLabel($setting);
-        $choice = TypeSettingParser::parseChoice($setting);
+        $label    = TypeSettingParser::parseLabel($setting);
+        $choice   = TypeSettingParser::parseChoice($setting);
         $required = TypeSettingParser::parseRequired($setting);
-        $tab = TypeSettingParser::parseTab($setting);
+        $tab      = TypeSettingParser::parseTab($setting);
         $multiple = TypeSettingParser::parseMultiple($setting);
         try{
             $value = (string)$value;

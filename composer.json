@@ -1,0 +1,34 @@
+{
+  "name": "stallfish/cms-common",
+  "description": "This bundle provide a common feature to Stallfish CMS",
+  "keywords": [],
+  "type": "symfony-bundle",
+  "license": "All rights reserved",
+  "authors": [
+    {
+      "name": "Szymon Osadowski",
+      "email": "szymon@osadowki.it"
+    }
+  ],
+  "require": {
+    "symfony/framework-bundle": "~3.0",
+    "symfony/console": "~3.0",
+    "symfony/process": "~3.0",
+    "symfony/yaml": "~3.0",
+    "twig/twig": "|^2.0",
+    "symfony/class-loader": "~3.4"
+  },
+  "require-dev": {
+    "symfony/doctrine-bridge": "~3.0",
+    "symfony/filesystem": "~3.0",
+    "symfony/phpunit-bridge": "^3.3",
+    "doctrine/orm": "~2.4"
+  },
+  "autoload": {
+    "psr-4": { "Stallfish\\CmsCommonBundle\\": "" },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  },
+  "minimum-stability": "dev"
+}

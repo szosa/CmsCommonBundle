@@ -18,4 +18,9 @@ class ListType extends AbstractType
     {
         return self::LIST_TYPE;
     }
+
+    public function getFormFieldType():string
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
+    }
 }

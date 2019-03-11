@@ -76,4 +76,9 @@ class ChoiceType extends AbstractType
         return parent::getValue();
     }
 
+    public function getFormFieldType():string
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class;
+    }
+
 }

@@ -65,8 +65,16 @@ class TextType extends AbstractType
         return self::TEXT_TYPE;
     }
 
+    /**
+     * @return string
+     */
     public function getValue():string
     {
         return (string)parent::getValue();
+    }
+
+    public function getFormFieldType():string
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
     }
 }

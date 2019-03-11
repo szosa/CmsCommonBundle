@@ -72,7 +72,7 @@ class TypeSettingParser
     static function parseChoice(array $setting):array
     {
         try{
-            return (array)$setting['choice'];
+            return array_flip((array)$setting['choices']);
         }catch(\Exception $exception)
         {
             sprintf('Value of %s cannot be convert to array', self::parseLabel($setting));
