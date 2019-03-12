@@ -1,37 +1,39 @@
 services:
-#    cms_common.example:
-#        class: Stallfish\CmsCommonBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
   stallfish.show.messages:
       class: Stallfish\CmsCommonBundle\Service\ShowMessageService
+      public: true
       arguments:
           - '@twig'
           - '@translator'
 
   stallfish.settings.parser:
       class: Stallfish\CmsCommonBundle\Service\SettingsParserService
+      public: true
       arguments:
           - '@filesystem'
           - '%kernel.root_dir%'
 
   stallfish.setting.aggregate:
       class: Stallfish\CmsCommonBundle\Service\SettingAggregateService
+      public: true
       arguments:
           - '@doctrine.orm.entity_manager'
           - '@stallfish.settings.parser'
 
   stallfish.settings:
     class: Stallfish\CmsCommonBundle\Service\SettingsService
+    public: true
     arguments:
         - '@stallfish.setting.aggregate'
 
   stallfish.settings.twig:
     class: Stallfish\CmsCommonBundle\Settings\Twig\StallfishSettingsExtension
-    public: false
+    public: true
     arguments:
         - '@stallfish.settings'
     tags:
         - { name: twig.extension }
 
   stalfish.setting.validator:
+    public: true
     class: Stallfish\CmsCommonBundle\Service\SettingValidatorService

@@ -3,7 +3,6 @@
 namespace Stallfish\CmsCommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Stallfish\CmsCommonBundle\Entity\Traits\BaseEntityTrait;
 use Sensio\Bundle\GeneratorBundle\Annotation\Translation;
 
 /**
@@ -15,7 +14,6 @@ use Sensio\Bundle\GeneratorBundle\Annotation\Translation;
 class Settings
 {
 
-    use BaseEntityTrait;
 
     /**
      * @var int

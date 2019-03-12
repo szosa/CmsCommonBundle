@@ -35,7 +35,7 @@ class SettingsParserService
      * @param Filesystem $filesystem
      * @param array $settingsDir
      */
-    public function __construct(Filesystem $filesystem,String $rootDir)
+    public function __construct(Filesystem $filesystem, string $rootDir)
     {
         $this->filesystem = $filesystem;
         $config = Yaml::parse(

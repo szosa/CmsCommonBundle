@@ -18,5 +18,8 @@
     "exclude-from-classmap": [
       "/Tests/"
     ]
+  },
+  "require": {
+    "predis/predis": "^1.1"
   }
 }
