@@ -30,14 +30,17 @@ class SettingsParserService
      */
     private $settingPaths;
 
+    private $projectDir;
+
     /**
      * SettingsParserService constructor.
      * @param Filesystem $filesystem
-     * @param array $settingsDir
+     * @param string $rootDir
      */
-    public function __construct(Filesystem $filesystem, string $rootDir)
+    public function __construct(Filesystem $filesystem, string $rootDir, string $projectDir)
     {
         $this->filesystem = $filesystem;
+        $this->projectDir = $projectDir;
         $config = Yaml::parse(
             file_get_contents( realpath($rootDir . '/config/config.yml'))
         );
@@ -93,7 +96,7 @@ class SettingsParserService
      */
     private function prepareSettingPath(String $settingPath):string
     {
-        $string = sprintf('../src/%s/Resources/config/settings.yml', $settingPath);
+        $string = sprintf($this->projectDir . '/src/%s/Resources/config/settings.yml', $settingPath);
         $path = realpath($string);
         if(!$this->filesystem->exists($path))
         {

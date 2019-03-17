@@ -12,6 +12,7 @@ services:
       arguments:
           - '@filesystem'
           - '%kernel.root_dir%'
+          - '%kernel.project_dir%'
 
   stallfish.setting.aggregate:
       class: Stallfish\CmsCommonBundle\Service\SettingAggregateService
